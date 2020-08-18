@@ -5,20 +5,13 @@
 #include "globaldefines.h"
 
 /*
-    ----------workFunction Stracture----------
-  work: void pointer to function
-  arg: void pointer to function arguments
-  TasksToExecute: Times this function must be executed
-  done: Variable that shows if the execution completed
-  times_executed: How many times the function executed
-  work_mutex: Mutex variable to update times_executed variable
-  execution_complete: Condition variable to show that the function completed its
-    executions
-  cons_delay: Array that holds the time needed to get the function from the queue
-    (its added for testing purposes)
+    ----------node Stracture----------
+  num: The number of the node 
+  degree: The degree of the node 
+  inside_perm: Variable that shows if the node is added in the permutation
+  inside_q: Variable that shows if the node is added in the queue
   
 */
-
 typedef struct{
 
     int num; 
@@ -28,22 +21,53 @@ typedef struct{
 
 }node;
 
+/*
+    ----------queue Stracture----------
+  buf: Array with nodes 
+  head,tail: Head and Tail for the circular queue 
+  full,empty: Varibles to check the state of the queue (full or emtpy)
+  
+*/
 typedef struct {
   node *buf;
   long head, tail;
   int full, empty;
-//   pthread_mutex_t *mut;
-//   pthread_cond_t *notFull, *notEmpty;
 
 } queue;
-
+/*
+  queueInit: Initializes an empty queue
+*/
 queue *queueInit(void);
 void queueSort(queue *q);
+
+/*
+  queueDelete: Deallocates(deletes) a queue
+    q: Queue to be deleted
+*/
 void queueDelete(queue *q);
-//change the in and out to node type
+
+/*
+  queueAdd: Adds a node in a queue
+    q: Queue that the node is added to 
+    in: Node to be added 
+*/
 void queueAdd(queue *q, node in);
+/*
+  queueDel: Extracts a node from a queue
+  queue: Queue that the node is being extracted from 
+  out: Node to be extracted
+*/
 void queueDel(queue *q, node *out);
+
+/*
+  nodeInit: Initializes an array of n nodes 
+    n: Number of nodes
+*/
 node *nodeInit(int n);
+/*
+  nodeDelete: Deallocates the space allocated for the nodes 
+    node: The node array to be deallocated
+*/
 void nodeDelete(node *node);
 
 #endif

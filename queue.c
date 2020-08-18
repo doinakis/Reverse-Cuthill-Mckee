@@ -12,17 +12,12 @@ queue *queueInit (void)
   q->full = 0;
   q->head = 0;
   q->tail = 0;
-//   q->mut = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-//   pthread_mutex_init(q->mut, NULL);
-
-//   q->notFull = (pthread_cond_t *)malloc(sizeof (pthread_cond_t));
-//   pthread_cond_init(q->notFull, NULL);
-//   q->notEmpty = (pthread_cond_t *)malloc(sizeof (pthread_cond_t));
-//   pthread_cond_init(q->notEmpty, NULL);
 
   return (q);
 }
 void queueSort(queue *q){
+
+  // Sort the queue in increasing order of degree
     node temp;
     for(int i=q->head;i<q->tail; i++){
         for(int j=i+1; j<q->tail;j++){
@@ -34,6 +29,7 @@ void queueSort(queue *q){
             }
         }
     }
+    
 }
 
 node *nodeInit(int n){
@@ -57,12 +53,6 @@ void nodeDelete(node *node){
 }
 void queueDelete(queue *q)
 {
-//   pthread_mutex_destroy(q->mut);
-//   free(q->mut);
-//   pthread_cond_destroy(q->notFull);
-//   free(q->notFull);
-//   pthread_cond_destroy(q->notEmpty);
-//   free(q->notEmpty);
   free(q->buf);
   free(q);
 }

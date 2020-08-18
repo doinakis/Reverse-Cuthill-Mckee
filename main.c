@@ -7,6 +7,7 @@
 #include "rcm.h"
 #include "queue.h"
 #include <limits.h>
+
 struct timeval startwtime,endwtime;
 double p_time;
 
@@ -32,7 +33,11 @@ int main(void){
     for(int i=0; i<n; i++){
         for(int j=0; j<n; j++){
             matrix(i,j) = help[i][j];
-            printf("%d ",matrix(i,j));
+            if(matrix(i,j)==1){
+                printf("■ ");
+            }else{
+                printf("□ ");
+            }
         }
         printf("\n");
     }
@@ -52,9 +57,9 @@ int main(void){
     for(int i=0;i<n;i++){
         for(int j=0; j<n;j++){
             if(matrix(permutation->buf[i].num,permutation->buf[j].num)){
-                printf("* ");
+                printf("■ ");
             }else{
-                printf("  ");
+                printf("□ ");
             }
         }
         printf("\n");
