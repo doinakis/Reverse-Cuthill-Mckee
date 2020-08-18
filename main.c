@@ -12,11 +12,14 @@ struct timeval startwtime,endwtime;
 double p_time;
 
 int main(void){
+    // Number of nodes in the graph 
     int n = 10;
-
+    // Initialize the adjacency matrix
     int *matrix = (int *)malloc(n*n*sizeof(int));
+    // Initialize a permutation queue
     queue *permutation = queueInit();
 
+    // Matrix as input for reordering 
     int help[10][10] = {
         { 1, 1, 0, 0, 0, 0, 1, 0, 1, 0 },
         { 1, 1, 0, 0, 1, 0, 1, 0, 0, 1 },
@@ -29,7 +32,7 @@ int main(void){
         { 1, 0, 0, 1, 0, 0, 0, 1, 1, 0 },
         { 0, 1, 0, 0, 1, 0, 0, 1, 0, 1 },
     };
-    
+    // Visual representation of the original matrix
     for(int i=0; i<n; i++){
         for(int j=0; j<n; j++){
             matrix(i,j) = help[i][j];
@@ -48,7 +51,6 @@ int main(void){
         printf("%d ",permutation->buf[i].num);
     }
     R_Cuthill_Mckee(n,permutation);
-    
     printf("The permutation of the matrix is: ");
     for(int i=0; i<10; i++){
         printf("%d ",permutation->buf[i].num);

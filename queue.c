@@ -29,7 +29,7 @@ void queueSort(queue *q){
             }
         }
     }
-    
+
 }
 
 node *nodeInit(int n){
@@ -45,21 +45,21 @@ node *nodeInit(int n){
   }
 
   return nodes;
-
 }
 
 void nodeDelete(node *node){
   free(node);
 }
-void queueDelete(queue *q)
-{
+void queueDelete(queue *q){
+
   free(q->buf);
   free(q);
+
 }
 
 //changed the in variable to be type node
-void queueAdd(queue *q, node in)
-{
+void queueAdd(queue *q, node in){
+
   q->buf[q->tail] = in;
   q->tail++;
   if (q->tail == QUEUESIZE)
@@ -72,10 +72,9 @@ void queueAdd(queue *q, node in)
 }
 
 //changed the out variable to be type node
-void queueDel(queue *q, node *out)
-{
-  *out = q->buf[q->head];
+void queueDel(queue *q, node *out){
 
+  *out = q->buf[q->head];
   q->head++;
   if (q->head == QUEUESIZE)
     q->head = 0;

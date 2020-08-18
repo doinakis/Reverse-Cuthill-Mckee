@@ -16,6 +16,7 @@ void degreeCalculation(int n, node *nodes,int *matrix){
 }
 
 void minimumNode(int n,int *minNode,node *nodes,queue *permutation){
+
     int min = 0;
     // Find the node with the minimum degree
     for(int i=1; i<n; i++){
@@ -27,9 +28,11 @@ void minimumNode(int n,int *minNode,node *nodes,queue *permutation){
     nodes[min].inside_perm = true;
     // Add the node in the permutation
     queueAdd(permutation,nodes[min]);
+
 }
 
 void findNeighbors(int n,int numberOfnode,int *matrix,node *nodes,queue *Q,queue *neighbors){
+
     // Counter that holds how many neighbors are found 
     int counter = 0;
     node del;
@@ -48,8 +51,8 @@ void findNeighbors(int n,int numberOfnode,int *matrix,node *nodes,queue *Q,queue
     for(int i=0; i<counter; i++){
         queueDel(neighbors,&del);
         queueAdd(Q,del);
-        
     }
+
 }
 
 void Cuthill_Mckee(int n, int *matrix,queue *permutation){
@@ -97,6 +100,7 @@ void Cuthill_Mckee(int n, int *matrix,queue *permutation){
     queueDelete(neighbors);
     nodeDelete(nodes);
     free(minNode);
+
 }
 // Reverse the indices in the permutation array
 
@@ -120,4 +124,5 @@ void R_Cuthill_Mckee(int n, queue *permutation){
         permutation->buf[i] = temp;
 
     }
+
 }

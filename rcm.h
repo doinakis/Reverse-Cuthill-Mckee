@@ -51,7 +51,4 @@ void Cuthill_Mckee(int n, int *matrix,queue *permutation);
 */
 void R_Cuthill_Mckee(int n, queue *permutation);
 
-
-
-
 #endif
