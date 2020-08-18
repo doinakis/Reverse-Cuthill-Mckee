@@ -43,6 +43,7 @@ void queueDelete(queue *q);
 //change the in and out to node type
 void queueAdd(queue *q, node in);
 void queueDel(queue *q, node *out);
-
+node *nodeInit(int n);
+void nodeDelete(node *node);
 
 #endif

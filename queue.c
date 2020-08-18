@@ -36,6 +36,25 @@ void queueSort(queue *q){
     }
 }
 
+node *nodeInit(int n){
+
+  node *nodes = (node *)malloc(n*sizeof(node));
+  for(int i=0;i<n;i++){
+
+    nodes[i].num = 0;
+    nodes[i].degree =0;
+    nodes[i].inside_perm = false;
+    nodes[i].inside_q = false;
+
+  }
+
+  return nodes;
+
+}
+
+void nodeDelete(node *node){
+  free(node);
+}
 void queueDelete(queue *q)
 {
 //   pthread_mutex_destroy(q->mut);

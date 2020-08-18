@@ -8,7 +8,7 @@
 #include </home/superdonut/Desktop/cilk/cilk_api.h>
 #include "queue.h"
 
-#define matrix(i,j) *(matrix + (i) * n + (j))
+
 
 /*
     degreeCalculation: Calculates the degree of each node
@@ -19,6 +19,8 @@
 void degreeCalculation(int n, node *nodes,int *matrix);
 void minimumNode(int n, int *minNode,node *nodes,queue *permutation);
 void findNeighbors(int n,int numberOfnode,int *matrix,node *nodes,queue *Q,queue *neighbors);
+void Cuthill_Mckee(int n, int *matrix,queue *permutation);
+void R_Cuthill_Mckee(int n, queue *permutation);
 
 
 

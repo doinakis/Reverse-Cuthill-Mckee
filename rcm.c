@@ -44,4 +44,46 @@ void findNeighbors(int n,int numberOfnode,int *matrix,node *nodes,queue *Q,queue
         
     }
 }
+
+void Cuthill_Mckee(int n, int *matrix,queue *permutation){
+    node *nodes = nodeInit(n);
+    int *minNode = (int *)malloc(sizeof(int));
+    *minNode = 0;
     
+    queue *Q = queueInit();
+    queue *neighbors = queueInit();
+    node extracted_node;
+    degreeCalculation(n,nodes,matrix);
+    printf("Degrees: ");
+    for(int i=0; i<10; i++){
+        printf("%d ",nodes[i].degree);
+    }
+    
+    minimumNode(n,minNode,nodes,permutation);
+    findNeighbors(n,*minNode,matrix,nodes,Q,neighbors);
+    int counter = 0;
+    while(!Q->empty){
+        queueDel(Q,&extracted_node);
+        queueAdd(permutation,extracted_node);
+        findNeighbors(n,extracted_node.num,matrix,nodes,Q,neighbors);
+        counter++;
+    }
+    queueDelete(Q);
+    queueDelete(neighbors);
+    nodeDelete(nodes);
+    free(minNode);
+}
+void R_Cuthill_Mckee(int n, queue *permutation){
+    int new_n = n;
+    if(new_n%2==0){
+        new_n-=1;
+    }
+    new_n = new_n/2;
+    node temp;
+    for(int i=0; i<=new_n; i++){
+        temp = permutation->buf[n-i-1];
+        permutation->buf[n-i-1] = permutation->buf[i];
+        permutation->buf[i] = temp;
+
+    }
+}
