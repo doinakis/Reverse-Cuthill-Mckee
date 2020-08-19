@@ -38,6 +38,11 @@ typedef struct {
   queueInit: Initializes an empty queue
 */
 queue *queueInit(void);
+
+/*
+  queueSort: Sorts the corresponding queue in increasing order 
+    q: Queue to be sorted 
+*/
 void queueSort(queue *q);
 
 /*

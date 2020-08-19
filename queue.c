@@ -15,6 +15,7 @@ queue *queueInit (void)
 
   return (q);
 }
+
 void queueSort(queue *q){
 
   // Sort the queue in increasing order of degree
@@ -32,30 +33,14 @@ void queueSort(queue *q){
 
 }
 
-node *nodeInit(int n){
-
-  node *nodes = (node *)malloc(n*sizeof(node));
-  for(int i=0;i<n;i++){
-
-    nodes[i].num = 0;
-    nodes[i].degree =0;
-    nodes[i].inside_perm = false;
-    nodes[i].inside_q = false;
-
-  }
-
-  return nodes;
-}
-
-void nodeDelete(node *node){
-  free(node);
-}
 void queueDelete(queue *q){
 
   free(q->buf);
   free(q);
 
 }
+
+
 
 //changed the in variable to be type node
 void queueAdd(queue *q, node in){
@@ -73,8 +58,9 @@ void queueAdd(queue *q, node in){
 
 //changed the out variable to be type node
 void queueDel(queue *q, node *out){
-
+  
   *out = q->buf[q->head];
+  
   q->head++;
   if (q->head == QUEUESIZE)
     q->head = 0;
@@ -84,3 +70,27 @@ void queueDel(queue *q, node *out){
 
   return;
 }
+
+node *nodeInit(int n){
+
+  node *nodes = (node *)malloc(n*sizeof(node));
+  for(int i=0;i<n;i++){
+
+    nodes[i].num = 0;
+    nodes[i].degree = 0;
+    nodes[i].inside_perm = false;
+    nodes[i].inside_q = false;
+
+  }
+
+  return nodes;
+}
+
+void nodeDelete(node *node){
+  free(node);
+}
+
+
+
+
+

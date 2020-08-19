@@ -18,9 +18,14 @@ void degreeCalculation(int n, node *nodes,int *matrix){
 void minimumNode(int n,int *minNode,node *nodes,queue *permutation){
 
     int min = 0;
+    int first_time = 1;
     // Find the node with the minimum degree
-    for(int i=1; i<n; i++){
-        if(nodes[i].degree < nodes[min].degree){
+    for(int i=0; i<n; i++){
+        if(first_time == 1 && nodes[i].inside_perm == false){
+            first_time = 0;
+            min = i;
+        }
+        if(nodes[i].degree < nodes[min].degree && nodes[i].inside_perm == false && nodes[min].inside_perm == false){
             min = i;
         }
     }
@@ -84,16 +89,21 @@ void Cuthill_Mckee(int n, int *matrix,queue *permutation){
     // Find the node with the minimum degree and its neighbors 
     minimumNode(n,minNode,nodes,permutation);
     findNeighbors(n,*minNode,matrix,nodes,Q,neighbors);
-    // int counter = 0;
     // While the Q is not empty 
+    int nodes_added = 0;
     while(!Q->empty){
         // Extract the first node in the Q
         queueDel(Q,&extracted_node);
         // Add the node to the permutation
         queueAdd(permutation,extracted_node);
+        nodes[extracted_node.num].inside_perm = true;
+        nodes_added++;
         // Find the neighbors of the extracted node and add them in increasing order of degree in the Q
         findNeighbors(n,extracted_node.num,matrix,nodes,Q,neighbors);
-        // counter++;
+        if(Q->empty && nodes_added != n-1){
+            minimumNode(n,minNode,nodes,permutation);
+            findNeighbors(n,*minNode,matrix,nodes,Q,neighbors);
+        }
     }
     // Deallocate the space used and no longer needed 
     queueDelete(Q);
@@ -106,19 +116,17 @@ void Cuthill_Mckee(int n, int *matrix,queue *permutation){
 
 void R_Cuthill_Mckee(int n, queue *permutation){
 
-    /* Value to hold how many swaps are going to happen 
+    /* 
+        Value to hold how many swaps are going to happen 
         if n is even then the number of swaps needed is floor((n-1)/2)+1
         else is floor(n/2)+1
     */
     int new_n = n;
-    if(new_n%2 == 0){
-        new_n-=1;
-    }
     new_n = new_n/2;
     
     node temp;
     // Apply the swap
-    for(int i=0; i<=new_n; i++){
+    for(int i=0; i<new_n; i++){
         temp = permutation->buf[n-i-1];
         permutation->buf[n-i-1] = permutation->buf[i];
         permutation->buf[i] = temp;
