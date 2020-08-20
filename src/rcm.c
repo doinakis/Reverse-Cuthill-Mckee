@@ -1,4 +1,4 @@
-#include "rcm.h"
+#include "../inc/rcm.h"
 
 
 
@@ -61,7 +61,7 @@ void findNeighbors(int n,int numberOfnode,int *matrix,node *nodes,queue *Q,queue
 }
 
 void Cuthill_Mckee(int n, int *matrix,queue *permutation){
-    
+
     // Initialize an array of n nodes
     node *nodes = nodeInit(n);
 
@@ -80,11 +80,6 @@ void Cuthill_Mckee(int n, int *matrix,queue *permutation){
 
     // Calcutation of all the degrees
     degreeCalculation(n,nodes,matrix);
-
-    printf("Degrees: ");
-    for(int i=0; i<10; i++){
-        printf("%d ",nodes[i].degree);
-    }
 
     // Find the node with the minimum degree and its neighbors 
     minimumNode(n,minNode,nodes,permutation);
@@ -114,8 +109,9 @@ void Cuthill_Mckee(int n, int *matrix,queue *permutation){
 }
 // Reverse the indices in the permutation array
 
-void R_Cuthill_Mckee(int n, queue *permutation){
+void R_Cuthill_Mckee(int n,int *matrix,queue *permutation){
 
+    Cuthill_Mckee(n,matrix,permutation);
     /* 
         Value to hold how many swaps are going to happen 
         if n is even then the number of swaps needed is floor((n-1)/2)+1

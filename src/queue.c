@@ -1,4 +1,4 @@
-#include "queue.h"
+#include "../inc/queue.h"
 
 
 queue *queueInit (void)
@@ -87,7 +87,9 @@ node *nodeInit(int n){
 }
 
 void nodeDelete(node *node){
+
   free(node);
+
 }
 
 

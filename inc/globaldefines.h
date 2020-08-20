@@ -7,9 +7,10 @@
 #include <sys/time.h>
 #include <sys/times.h>
 #include <stdbool.h>
-#include </home/superdonut/Desktop/cilk/cilk.h>
-#include </home/superdonut/Desktop/cilk/cilk_api.h>
-#define QUEUESIZE 10
-#define matrix(i,j) *(matrix + (i) * n + (j))
+
+
+#define QUEUESIZE 2713
+#define N 2713
+#define matrix(i,j) *(matrix + (i) * N + (j))
 
 #endif

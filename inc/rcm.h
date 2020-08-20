@@ -4,11 +4,13 @@
 
 #include <stdio.h>
 #include <stdbool.h>
-#include </home/superdonut/Desktop/cilk/cilk.h>
-#include </home/superdonut/Desktop/cilk/cilk_api.h>
 #include "queue.h"
+#include <time.h>
+#include <sys/time.h>
+#include <sys/times.h>
 
-
+struct timeval starttime,endtime;
+double time1;
 
 /*
     degreeCalculation: Calculates the degree of each node
@@ -42,13 +44,13 @@ void findNeighbors(int n,int numberOfnode,int *matrix,node *nodes,queue *Q,queue
         matrix: Adjacency matrix of nodes
         permutation: Queue with the permutation
 */
-void Cuthill_Mckee(int n, int *matrix,queue *permutation);
+void Cuthill_Mckee(int n,int *matrix,queue *permutation);
 
 /*
     R_Cuthill_Mckee: Reverse Cuthill-Mckee serial implementation
         n: Number of nodes
         permutation: Queue with the permutation
 */
-void R_Cuthill_Mckee(int n, queue *permutation);
+void R_Cuthill_Mckee(int n,int *matrix,queue *permutation);
 
 #endif
