@@ -9,24 +9,24 @@
 all:	main_sequential main_cilk mv.o
 
 main_cilk:	main_cilk.o	rcm_cilk.o	queue.o
-			gcc-7	-fcilkplus	-lcilkrts	-O3 -g	rcm_cilk.o	queue.o	main_cilk.o	-o	main_cilk
+			gcc-7	-fcilkplus	-lcilkrts	-O3	rcm_cilk.o	queue.o	main_cilk.o	-o	main_cilk
 			
 main_cilk.o:	./src/main_cilk.c
-			gcc-7	-fcilkplus -lcilkrts	-c	-O3 -g	./src/main_cilk.c
+			gcc-7	-fcilkplus -lcilkrts	-c	-O3	./src/main_cilk.c
 
 rcm_cilk.o:	./src/rcm_cilk.c
-			gcc-7	-fcilkplus	-lcilkrts	-c	-O3 -g	./src/rcm_cilk.c
+			gcc-7	-fcilkplus	-lcilkrts	-c	-O3	./src/rcm_cilk.c
 
 main_sequential:	main_sequential.o	rcm.o queue.o
-			gcc-7	-O3	-g rcm.o	queue.o	main_sequential.o	-o 	main_sequential
+			gcc-7	-O3	rcm.o	queue.o	main_sequential.o	-o	main_sequential
 			
 main_sequential.o: ./src/main_sequential.c
-			gcc-7	-c	-O3	-g ./src/main_sequential.c
+			gcc-7	-c	-O3	./src/main_sequential.c
 
 rcm.o: ./src/rcm.c
-			gcc-7	-c	-O3 -g	./src/rcm.c
+			gcc-7	-c	-O3	./src/rcm.c
 queue.o: ./src/queue.c
-			gcc-7	-fcilkplus	-lcilkrts	-c	-O3 -g	./src/queue.c
+			gcc-7	-fcilkplus	-lcilkrts	-c	-O3	./src/queue.c
 
 example: example.o
 			g++	-o3	-g example.o -o example
