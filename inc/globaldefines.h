@@ -9,8 +9,8 @@
 #include <stdbool.h>
 
 
-#define QUEUESIZE 2713
-#define N 2713
+#define QUEUESIZE 10
+#define N 10
 #define matrix(i,j) *(matrix + (i) * N + (j))
 
 #endif

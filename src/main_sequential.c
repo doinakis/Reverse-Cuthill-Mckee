@@ -10,42 +10,42 @@ double p_time;
 int main(void){
     // Number of nodes in the graph 
     // int n = 2713;
-    size_t size;
+    // size_t size;
     // Initialize the adjacency matrix
     int *matrix = (int *)malloc(N*N*sizeof(int));
     // Read the matrix
-    FILE *fp = fopen("./example_matrices/matrix_barbell.bin", "rb");
-    size = fread(matrix, sizeof(int), N * N, fp);
-    if(size!=N*N) exit(EXIT_FAILURE);
-    fclose(fp);
+    // FILE *fp = fopen("./example_matrices/matrix_barbell.bin", "rb");
+    // size = fread(matrix, sizeof(int), N * N, fp);
+    // if(size!=N*N) exit(EXIT_FAILURE);
+    // fclose(fp);
     // Initialize a permutation queue
     queue *permutation = queueInit();
 
     // Matrix as input for reordering 
-    // int help[10][10] = {
-    //     { 0, 1, 0, 0, 0, 0, 1, 0, 1, 0 },
-    //     { 1, 0, 0, 0, 1, 0, 1, 0, 0, 1 },
-    //     { 0, 0, 0, 0, 1, 0, 1, 0, 0, 0 },
-    //     { 0, 0, 0, 0, 1, 1, 0, 0, 1, 0 },
-    //     { 0, 1, 1, 1, 0, 1, 0, 0, 0, 1 },
-    //     { 0, 0, 0, 1, 1, 0, 0, 0, 0, 0 },
-    //     { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
-    //     { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 },
-    //     { 1, 0, 0, 1, 0, 0, 0, 1, 0, 0 },
-    //     { 0, 1, 0, 0, 1, 0, 0, 1, 0, 0 },
-    // };
-    // // Visual representation of the original matrix
-    // for(int i=0; i<N; i++){
-    //     for(int j=0; j<N; j++){
-    //         matrix(i,j) = help[i][j];
-    //         if(matrix(i,j)==1){
-    //             printf("\u25CF ");
-    //         }else{
-    //             printf("\u25CB ");
-    //         }
-    //     }
-    //     printf("\n");
-    // }
+    int help[10][10] = {
+        { 0, 1, 0, 0, 0, 0, 1, 0, 0, 0 },
+        { 1, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 },
+        { 0, 0, 0, 0, 1, 1, 0, 0, 1, 0 },
+        { 0, 0, 0, 1, 0, 1, 0, 0, 0, 1 },
+        { 0, 0, 0, 1, 1, 0, 0, 0, 0, 0 },
+        { 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 },
+        { 0, 0, 0, 1, 0, 0, 0, 1, 0, 0 },
+        { 0, 0, 0, 0, 1, 0, 0, 1, 0, 0 },
+    };
+    // Visual representation of the original matrix
+    for(int i=0; i<N; i++){
+        for(int j=0; j<N; j++){
+            matrix(i,j) = help[i][j];
+            if(matrix(i,j)==1){
+                printf("\u25CF ");
+            }else{
+                printf("\u25CB ");
+            }
+        }
+        printf("\n");
+    }
     gettimeofday(&startwtime,NULL);
     R_Cuthill_Mckee(N,matrix,permutation);
     gettimeofday(&endwtime,NULL);

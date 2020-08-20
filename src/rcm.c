@@ -31,6 +31,7 @@ void minimumNode(int n,int *minNode,node *nodes,queue *permutation){
     }
     *minNode = min;
     nodes[min].inside_perm = true;
+    nodes[min].inside_q = true;
     // Add the node in the permutation
     queueAdd(permutation,nodes[min]);
 
@@ -81,22 +82,25 @@ void Cuthill_Mckee(int n, int *matrix,queue *permutation){
     // Calcutation of all the degrees
     degreeCalculation(n,nodes,matrix);
 
+
+    // While the Q is not empty 
+    int nodes_added = 0;
     // Find the node with the minimum degree and its neighbors 
     minimumNode(n,minNode,nodes,permutation);
     findNeighbors(n,*minNode,matrix,nodes,Q,neighbors);
-    // While the Q is not empty 
-    int nodes_added = 0;
+    nodes_added++;
     while(!Q->empty){
         // Extract the first node in the Q
         queueDel(Q,&extracted_node);
-        // Add the node to the permutation
-        queueAdd(permutation,extracted_node);
         nodes[extracted_node.num].inside_perm = true;
+        // Add the node to the permutation
+        queueAdd(permutation,nodes[extracted_node.num]);
         nodes_added++;
         // Find the neighbors of the extracted node and add them in increasing order of degree in the Q
         findNeighbors(n,extracted_node.num,matrix,nodes,Q,neighbors);
-        if(Q->empty && nodes_added != n-1){
+        if(Q->empty == 1 && nodes_added != n){
             minimumNode(n,minNode,nodes,permutation);
+            nodes_added++;
             findNeighbors(n,*minNode,matrix,nodes,Q,neighbors);
         }
     }
