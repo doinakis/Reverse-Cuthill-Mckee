@@ -5,6 +5,7 @@
 # Usage:
 # make        # compile all binary
 # make clean  # remove ALL binaries and objects
+
 all:	main_sequential main_cilk mv.o
 
 main_cilk:	main_cilk.o	rcm_cilk.o	queue.o
