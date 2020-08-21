@@ -2,6 +2,18 @@
 
 
 
+void permutationInit(permutation *R){
+
+    R->index = 0;
+    R->perm = (int *)malloc(N*sizeof(int));
+}
+
+void permutationDelete(permutation *R){
+
+    free(R->perm);
+    free(R);
+}
+
 void degreeCalculation(int n, node *nodes,int *matrix){
 
     // As degree of each node is considered the #neighbors
@@ -15,7 +27,7 @@ void degreeCalculation(int n, node *nodes,int *matrix){
     }
 }
 
-void minimumNode(int n,int *minNode,node *nodes,queue *permutation){
+void minimumNode(int n,int *minNode,node *nodes,permutation *R){
 
     int min = 0;
     int first_time = 1;
@@ -32,8 +44,9 @@ void minimumNode(int n,int *minNode,node *nodes,queue *permutation){
     *minNode = min;
     nodes[min].inside_perm = true;
     nodes[min].inside_q = true;
+
     // Add the node in the permutation
-    queueAdd(permutation,nodes[min]);
+    R->perm[R->index++] = nodes[min].num;
 
 }
 
@@ -61,7 +74,7 @@ void findNeighbors(int n,int numberOfnode,int *matrix,node *nodes,queue *Q,queue
 
 }
 
-void Cuthill_Mckee(int n, int *matrix,queue *permutation){
+void Cuthill_Mckee(int n, int *matrix,permutation *R){
 
     // Initialize an array of n nodes
     node *nodes = nodeInit(n);
@@ -86,7 +99,7 @@ void Cuthill_Mckee(int n, int *matrix,queue *permutation){
     // While the Q is not empty 
     int nodes_added = 0;
     // Find the node with the minimum degree and its neighbors 
-    minimumNode(n,minNode,nodes,permutation);
+    minimumNode(n,minNode,nodes,R);
     findNeighbors(n,*minNode,matrix,nodes,Q,neighbors);
     nodes_added++;
     while(!Q->empty){
@@ -94,12 +107,12 @@ void Cuthill_Mckee(int n, int *matrix,queue *permutation){
         queueDel(Q,&extracted_node);
         nodes[extracted_node.num].inside_perm = true;
         // Add the node to the permutation
-        queueAdd(permutation,nodes[extracted_node.num]);
+        R->perm[R->index++] = extracted_node.num;
         nodes_added++;
         // Find the neighbors of the extracted node and add them in increasing order of degree in the Q
         findNeighbors(n,extracted_node.num,matrix,nodes,Q,neighbors);
         if(Q->empty == 1 && nodes_added != n){
-            minimumNode(n,minNode,nodes,permutation);
+            minimumNode(n,minNode,nodes,R);
             nodes_added++;
             findNeighbors(n,*minNode,matrix,nodes,Q,neighbors);
         }
@@ -113,9 +126,9 @@ void Cuthill_Mckee(int n, int *matrix,queue *permutation){
 }
 // Reverse the indices in the permutation array
 
-void R_Cuthill_Mckee(int n,int *matrix,queue *permutation){
+void R_Cuthill_Mckee(int n,int *matrix,permutation *R){
 
-    Cuthill_Mckee(n,matrix,permutation);
+    Cuthill_Mckee(n,matrix,R);
     /* 
         Value to hold how many swaps are going to happen 
         if n is even then the number of swaps needed is floor((n-1)/2)+1
@@ -124,12 +137,12 @@ void R_Cuthill_Mckee(int n,int *matrix,queue *permutation){
     int new_n = n;
     new_n = new_n/2;
     
-    node temp;
+    int temp;
     // Apply the swap
     for(int i=0; i<new_n; i++){
-        temp = permutation->buf[n-i-1];
-        permutation->buf[n-i-1] = permutation->buf[i];
-        permutation->buf[i] = temp;
+        temp = R->perm[n-i-1];
+        R->perm[n-i-1] = R->perm[i];
+        R->perm[i] = temp;
 
     }
 

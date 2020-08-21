@@ -9,6 +9,24 @@
 #include "queue.h"
 
 
+typedef struct{
+
+    int *perm;
+    int index;
+
+}permutation;
+
+/*
+    permutationInit: Initializes a permutation structure
+        R: The permutation to be initialized
+*/
+void permutationInit(permutation *R);
+
+/*
+    permutationDelete: Frees the alocated space for a permutation structure
+        R: The permutation to be initialized
+*/
+void permutationDelete(permutation *R);
 
 /*
     degreeCalculation: Calculates the degree of each node
@@ -24,7 +42,7 @@ void degreeCalculation(int n, node *nodes,int *matrix);
         degrees: Array with the degrees
         permutation: Queue with the permutation order
 */
-void minimumNode(int n, int *minNode,node *nodes,queue *permutation);
+void minimumNode(int n, int *minNode,node *nodes, permutation *R);
 
 /*
     findNeighbors: Finds the neighbors of the corresponding node
@@ -42,13 +60,13 @@ void findNeighbors(int n,int numberOfnode,int *matrix,node *nodes,queue *Q,queue
         matrix: Adjacency matrix of nodes
         permutation: Queue with the permutation
 */
-void Cuthill_Mckee_cilk(int n,int *matrix,queue *permutation);
+void Cuthill_Mckee_cilk(int n,int *matrix, permutation *R);
 
 /*
     R_Cuthill_Mckee: Reverse Cuthill-Mckee serial implementation
         n: Number of nodes
         permutation: Queue with the permutation
 */
-void R_Cuthill_Mckee_cilk(int n,int *matrix,queue *permutation);
+void R_Cuthill_Mckee_cilk(int n,int *matrix, permutation *R);
 
 #endif
