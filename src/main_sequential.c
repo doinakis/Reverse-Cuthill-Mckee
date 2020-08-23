@@ -27,7 +27,7 @@ int main(){
     
 
     if((f = fopen("./example_matrices/test.mtx", "r")) == NULL){
-        printf("Could not open file. Check thee file name and try again.");
+        printf("Could not open file. Check the file name and try again.");
         exit(1);
     }
       
