@@ -1,7 +1,24 @@
+
+/*
+ *	File	: 
+ *
+ *	Title	: Demo Producer/Consumer. Only the Queue part is obtained and modified.
+ *
+ *	Short	: A solution to the producer consumer problem using
+ *		pthreads.	
+ *
+ *	Long 	:
+ *
+ *	Author	: Andrae Muys
+ *
+ *	Date	: 18 September 1997
+ *
+ *	Revised	: Doinakis Michalis
+ *      e-mail: doinakis@ece.auth.gr
+ */
 #ifndef QUEUE_H
 #define QUEUE_H
 
-#include <stdbool.h>
 #include "globaldefines.h"
 
 /*
@@ -26,18 +43,21 @@ typedef struct{
   buf: Array with nodes 
   head,tail: Head and Tail for the circular queue 
   full,empty: Varibles to check the state of the queue (full or emtpy)
+  buf_size: the size of the buffer 
   
 */
 typedef struct {
   node *buf;
   long head, tail;
   int full, empty;
+  int buf_size;
 
 } queue;
+
 /*
   queueInit: Initializes an empty queue
 */
-queue *queueInit(void);
+queue *queueInit(int n);
 
 /*
   queueSort: Sorts the corresponding queue in increasing order 
@@ -57,6 +77,7 @@ void queueDelete(queue *q);
     in: Node to be added 
 */
 void queueAdd(queue *q, node in);
+
 /*
   queueDel: Extracts a node from a queue
   queue: Queue that the node is being extracted from 
@@ -69,6 +90,7 @@ void queueDel(queue *q, node *out);
     n: Number of nodes
 */
 node *nodeInit(int n);
+
 /*
   nodeDelete: Deallocates the space allocated for the nodes 
     node: The node array to be deallocated

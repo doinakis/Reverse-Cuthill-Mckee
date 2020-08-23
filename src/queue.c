@@ -1,18 +1,36 @@
+/*
+ *	File	: 
+ *
+ *	Title	: Demo Producer/Consumer. Only the Queue part is obtained and modified.
+ *
+ *	Short	: A solution to the producer consumer problem using
+ *		pthreads.	
+ *
+ *	Long 	:
+ *
+ *	Author	: Andrae Muys
+ *
+ *	Date	: 18 September 1997
+ *
+ *	Revised	: Doinakis Michalis
+ *      e-mail: doinakis@ece.auth.gr
+ */
+
 #include "../inc/queue.h"
 
 
-queue *queueInit (void)
+queue *queueInit(int n)
 {
   queue *q;
 
   q = (queue *)malloc(sizeof (queue));
-  q->buf = (node*)malloc(QUEUESIZE*sizeof(node));
+  q->buf = (node*)malloc(n*sizeof(node));
   if (q == NULL) return (NULL);
   q->empty = 1;
   q->full = 0;
   q->head = 0;
   q->tail = 0;
-
+  q->buf_size = n;
   return (q);
 }
 
@@ -47,7 +65,7 @@ void queueAdd(queue *q, node in){
 
   q->buf[q->tail] = in;
   q->tail++;
-  if (q->tail == QUEUESIZE)
+  if (q->tail == q->buf_size)
     q->tail = 0;
   if (q->tail == q->head)
     q->full = 1;
@@ -62,7 +80,7 @@ void queueDel(queue *q, node *out){
   *out = q->buf[q->head];
   
   q->head++;
-  if (q->head == QUEUESIZE)
+  if (q->head == q->buf_size)
     q->head = 0;
   if (q->head == q->tail)
     q->empty = 1;
@@ -76,7 +94,7 @@ node *nodeInit(int n){
   node *nodes = (node *)malloc(n*sizeof(node));
   for(int i=0;i<n;i++){
 
-    nodes[i].num = 0;
+    nodes[i].num = i;
     nodes[i].degree = 0;
     nodes[i].inside_perm = false;
     nodes[i].inside_q = false;

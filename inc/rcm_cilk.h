@@ -1,14 +1,32 @@
  
+/*
+ *Implementation of the Reverse Cuthill-Mckee Algorithm in c 
+ *
+ *Author: Doinakis Michail
+ *e-mail: doinakis@ece.auth.gr
+ */
+
 #ifndef RCM_H
 #define RCM_H
 
 #include <stdio.h>
 #include <stdbool.h>
+#include "queue.h"
+#include <time.h>
+#include <sys/time.h>
+#include <sys/times.h>
 #include </home/superdonut/Desktop/cilk/cilk.h>
 #include </home/superdonut/Desktop/cilk/cilk_api.h>
-#include "queue.h"
 
+struct timeval starttime,endtime;
+double time1;
 
+/*
+    ----------permutation Stracture----------
+  perm: Int array containing the permutation 
+  index: The next available spot in the matrix
+  
+*/
 typedef struct{
 
     int *perm;
@@ -19,8 +37,9 @@ typedef struct{
 /*
     permutationInit: Initializes a permutation structure
         R: The permutation to be initialized
+        n: The number of nodes in the graph 
 */
-void permutationInit(permutation *R);
+void permutationInit(permutation *R,int n);
 
 /*
     permutationDelete: Frees the alocated space for a permutation structure
@@ -32,41 +51,48 @@ void permutationDelete(permutation *R);
     degreeCalculation: Calculates the degree of each node
         n: Number of nodes
         degrees: Array with the degrees 
-        matrix: Graph given as a matrix
+        rows,cols: Adjacency matrices row[i] is adjacent to col[i]
+        total_elements: The sum the neighbors of all the elements in the graph
 */
-void degreeCalculation(int n, node *nodes,int *matrix);
+void degreeCalculation(int n, node *nodes,int *rows,int *cols,int *total_elements);
 
 /*
     minimumNode: Calculates the node with the minimum degree
         n: Number of nodes
+        minNode: The node with the minimum degree
         degrees: Array with the degrees
-        permutation: Queue with the permutation order
+        R: Struct with the permutation order
 */
-void minimumNode(int n, int *minNode,node *nodes, permutation *R);
+void minimumNode(int n, int *minNode,node *nodes,permutation *R);
 
 /*
     findNeighbors: Finds the neighbors of the corresponding node
-        n: Number of nodes
+        nz: Number non zero elements in the graph
         numberOfnode: Which nodes neighbors to find 
+        rows,cols: Adjacency matrices row[i] is adjacent to col[i]
         nodes: Array with all the nodes 
         Q: Queue containing the nodes to be added in the permutation
-        neighbors: Queue with the neighbors 
+        temp_neighbors: Queue with the neighbors of the corresponding node 
+        neighbors: 2d array holding the neighbors of all the elements  
 */
-void findNeighbors(int n,int numberOfnode,int *matrix,node *nodes,queue *Q,queue *neighbors);
+void findNeighbors(int nz,int numberOfnode,int *rows,int *cols,node *nodes,queue *Q,queue *temp_neighbors,int **neighbors);
 
 /*
     Cuthill_Mckee: Cuthill-McKee serial implementation
         n: Number of nodes 
-        matrix: Adjacency matrix of nodes
-        permutation: Queue with the permutation
+        nz: Number non zero elements in the graph
+        rows,cols: Adjacency matrices row[i] is adjacent to col[i]
+        R: Struct with the permutation
 */
-void Cuthill_Mckee_cilk(int n,int *matrix, permutation *R);
+void Cuthill_Mckee_cilk(int n,int nz,int *rows,int *cols,permutation *R);
 
 /*
     R_Cuthill_Mckee: Reverse Cuthill-Mckee serial implementation
         n: Number of nodes
-        permutation: Queue with the permutation
+        nz: Number non zero elements in the graph
+        rows,cols: Adjacency matrices row[i] is adjacent to col[i]
+        R: Struct with the permutation
 */
-void R_Cuthill_Mckee_cilk(int n,int *matrix, permutation *R);
+void R_Cuthill_Mckee_cilk(int n,int nz,int *rows,int *cols,permutation *R);
 
 #endif

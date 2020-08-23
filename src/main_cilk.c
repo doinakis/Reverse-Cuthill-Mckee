@@ -1,73 +1,83 @@
 
+/*
+ *Implementation of the Reverse Cuthill-Mckee Algorithm in c 
+ *
+ *Author: Doinakis Michail
+ *e-mail: doinakis@ece.auth.gr
+ * Main file modified https://math.nist.gov/MatrixMarket/mmio/c/example_read.c
+ */
+
 #include "../inc/globaldefines.h"
 #include "../inc/rcm_cilk.h"
 #include "../inc/queue.h"
-
-
+#include "../inc/mmio.h"
 
 struct timeval startwtime,endwtime;
 double p_time;
 
-int main(void){
-    // Number of nodes in the graph 
-    size_t size;
-    // Initialize the adjacency matrix
-    int *matrix = (int *)malloc(N*N*sizeof(int));
-    // Read the matrix
-    // FILE *fp = fopen("./example_matrices/matrix_barbell.bin", "rb");
-    // size = fread(matrix, sizeof(int), N * N, fp);
-    // if(size!=N*N) exit(EXIT_FAILURE);
-    // fclose(fp);
+int main(){
+
+    int ret_code;
+    FILE *f;
+    int M, N, nz;   
+    int *rows, *cols;
+    // Note that the val variable is not use in this implementation but it could be used to calculate the weighted degree
+    double *val;
     permutation *R = (permutation *)malloc(sizeof(permutation));
-    permutationInit(R);
-    // // Matrix as input for reordering 
-    int help[10][10] = {
-        { 1, 1, 0, 0, 0, 0, 1, 0, 1, 0 },
-        { 1, 1, 0, 0, 1, 0, 1, 0, 0, 1 },
-        { 0, 0, 1, 0, 1, 0, 1, 0, 0, 0 },
-        { 0, 0, 0, 1, 1, 1, 0, 0, 1, 0 },
-        { 0, 1, 1, 1, 1, 1, 0, 0, 0, 1 },
-        { 0, 0, 0, 1, 1, 1, 0, 0, 0, 0 },
-        { 1, 1, 1, 0, 0, 0, 1, 0, 0, 0 },
-        { 0, 0, 0, 0, 0, 0, 0, 1, 1, 1 },
-        { 1, 0, 0, 1, 0, 0, 0, 1, 1, 0 },
-        { 0, 1, 0, 0, 1, 0, 0, 1, 0, 1 },
-    };
-    // Visual representation of the original matrix
-    for(int i=0; i<N; i++){
-        for(int j=0; j<N; j++){
-            matrix(i,j) = help[i][j];
-            if(matrix(i,j)==1){
-                printf("\u25CF ");
-            }else{
-                printf("\u25CB ");
-            }
-        }
-        printf("\n");
+    
+
+    if((f = fopen("./example_matrices/qpband.mtx", "r")) == NULL){
+        printf("Could not open file. Check thee file name and try again.");
+        exit(1);
     }
+      
+
+    // Use mmio to find the size of the matrix and the non-zeros
+    if ((ret_code = mm_read_mtx_crd_size(f, &M, &N, &nz)) != 0){
+        printf("File format should be market matrix. Could not read size of sparse matrix and non-zeros.");
+        exit(1);
+    }
+        
+
+
+    // Memory allocations 
+
+    rows = (int *)malloc(nz*sizeof(int));
+    cols = (int *)malloc(nz*sizeof(int));
+    val = (double *)malloc(nz*sizeof(double));
+
+    // Initialize a permutaion 
+    permutationInit(R,N);
+
+    /* NOTE: when reading in doubles, ANSI C requires the use of the "l"  */
+    /*   specifier as in "%lg", "%lf", "%le", otherwise errors will occur */
+    /*  (ANSI C X3.159-1989, Sec. 4.9.6.2, p. 136 lines 13-15)            */
+
+    for (int i=0; i<nz; i++)
+    {
+        ret_code = fscanf(f, "%d %d %lg\n", &rows[i], &cols[i], &val[i]);
+        rows[i]--;  /* adjust from 1-based to 0-based */
+        cols[i]--;
+    }
+
+    if (f != stdin) fclose(f);
+
     gettimeofday(&startwtime,NULL);
-    R_Cuthill_Mckee_cilk(N,matrix,R);
+    R_Cuthill_Mckee_cilk(N,nz,rows,cols,R);
     gettimeofday(&endwtime,NULL);
     p_time = (double)((endwtime.tv_usec-startwtime.tv_usec)/1.0e6+endwtime.tv_sec-startwtime.tv_sec);
-    printf("Time %f\n",p_time);
-    printf("The permutation of the matrix is: ");
-    for(int i=0; i<N; i++){
-        printf("%d ",R->perm[i]);
+
+    for (int i=0; i<N; i++){
+        fprintf(stdout, "%d ",R->perm[i]);
+
     }
-    printf("\n");
-    for(int i=0;i<N;i++){
-        for(int j=0; j<N;j++){
-            if(matrix(R->perm[i],R->perm[j]) || i == j){
-                printf("\u25CF ");
-            }else{
-                printf("\u25CB ");
-            }
-        }
-        printf("\n");
-    }
+    printf("Time %f\n",p_time);    
+	
+    // Deallocating the space that was malloced
     permutationDelete(R);
-    free(matrix);
-    
+    free(rows);
+    free(cols);
+    free(val);
+
     return 0;
-    
 }

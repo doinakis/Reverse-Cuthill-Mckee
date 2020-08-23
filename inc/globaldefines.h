@@ -1,3 +1,9 @@
+/*
+ *Implementation of the Reverse Cuthill-Mckee Algorithm in c 
+ *
+ *Author: Doinakis Michail
+ *e-mail: doinakis@ece.auth.gr
+ */
 #ifndef GLOBALDEFINES_H
 #define GLOBALDEFINES_H
 
@@ -9,8 +15,5 @@
 #include <stdbool.h>
 
 
-#define QUEUESIZE 10
-#define N 10
-#define matrix(i,j) *(matrix + (i) * N + (j))
 
 #endif
