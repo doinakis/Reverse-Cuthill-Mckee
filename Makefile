@@ -6,7 +6,7 @@
 # make        # compile all binary
 # make clean  # remove ALL binaries and objects
 
-all:	main_sequential  
+all:	main_sequential  main_cilk mv.o
 
 main_cilk:	main_cilk.o	rcm_cilk.o	queue.o mmio.o
 			gcc-7	-Wall -O3	-fcilkplus	-lcilkrts		rcm_cilk.o	queue.o	main_cilk.o	mmio.o	-o	main_cilk 

@@ -49,7 +49,7 @@ void permutationDelete(permutation *R);
     degreeCalculation: Calculates the degree of each node
         n: Number of nodes
         degrees: Array with the degrees 
-        rows,cols: Adjacency matrices row[i] is adjacent to col[i]
+        rows,cols: Adjacency matrices rows[i] is adjacent to cols[i]
         total_elements: The sum the neighbors of all the elements in the graph
 */
 void degreeCalculation(int n, node *nodes,int *rows,int *cols,int *total_elements);
@@ -64,10 +64,22 @@ void degreeCalculation(int n, node *nodes,int *rows,int *cols,int *total_element
 void minimumNode(int n, int *minNode,node *nodes,queue *Q);
 
 /*
+    findAllNeighbors: Finds the neighbors of all the nodes in the graph
+        n: Number of nodes
+        nz: Number non zero elements in the graph
+        rows,cols: Adjacency matrices rows[i] is adjacent to cols[i]
+        nodes: Array with all the nodes
+        total_elements: The sum the neighbors of all the elements in the graph
+        neighbors: 2d array holding the neighbors of all the elements
+*/
+
+void findAllNeighbors(int n,int nz,int *rows,int *cols,node *nodes,int *total_elements,int **neighbors);
+
+/*
     findNeighbors: Finds the neighbors of the corresponding node
         nz: Number non zero elements in the graph
         numberOfnode: Which nodes neighbors to find 
-        rows,cols: Adjacency matrices row[i] is adjacent to col[i]
+        rows,cols: Adjacency matrices rows[i] is adjacent to cols[i]
         nodes: Array with all the nodes 
         Q: Queue containing the nodes to be added in the permutation
         temp_neighbors: Queue with the neighbors of the corresponding node 
@@ -79,7 +91,7 @@ void findNeighbors(int nz,int numberOfnode,int *rows,int *cols,node *nodes,queue
     Cuthill_Mckee: Cuthill-McKee serial implementation
         n: Number of nodes 
         nz: Number non zero elements in the graph
-        rows,cols: Adjacency matrices row[i] is adjacent to col[i]
+        rows,cols: Adjacency matrices rows[i] is adjacent to cols[i]
         R: Struct with the permutation
 */
 void Cuthill_Mckee(int n,int nz,int *rows,int *cols,permutation *R);
@@ -88,7 +100,7 @@ void Cuthill_Mckee(int n,int nz,int *rows,int *cols,permutation *R);
     R_Cuthill_Mckee: Reverse Cuthill-Mckee serial implementation
         n: Number of nodes
         nz: Number non zero elements in the graph
-        rows,cols: Adjacency matrices row[i] is adjacent to col[i]
+        rows,cols: Adjacency matrices rows[i] is adjacent to cols[i]
         R: Struct with the permutation
 */
 void R_Cuthill_Mckee(int n,int nz,int *rows,int *cols,permutation *R);

@@ -26,7 +26,7 @@ int main(){
     permutation *R = (permutation *)malloc(sizeof(permutation));
     
 
-    if((f = fopen("./example_matrices/qpband.mtx", "r")) == NULL){
+    if((f = fopen("./example_matrices/helm2d03.mtx", "r")) == NULL){
         printf("Could not open file. Check thee file name and try again.");
         exit(1);
     }
@@ -67,7 +67,7 @@ int main(){
     gettimeofday(&endwtime,NULL);
     p_time = (double)((endwtime.tv_usec-startwtime.tv_usec)/1.0e6+endwtime.tv_sec-startwtime.tv_sec);
 
-    for (int i=0; i<N; i++){
+    for (int i=0; i<10; i++){
         fprintf(stdout, "%d ",R->perm[i]);
 
     }

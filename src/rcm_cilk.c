@@ -32,7 +32,7 @@ void degreeCalculation(int n, node *nodes,int *rows,int *cols,int *total_element
     }
 }
 
-void minimumNode(int n,int *minNode,node *nodes,permutation *R){
+void minimumNode(int n,int *minNode,node *nodes,queue *Q){
 
     int min = 0;
     int first_time = 1;
@@ -47,12 +47,28 @@ void minimumNode(int n,int *minNode,node *nodes,permutation *R){
         }
     }
     *minNode = min;
-    nodes[min].inside_perm = true;
     nodes[min].inside_q = true;
 
-    // Add the node in the permutation
-    R->perm[R->index++] = nodes[min].num;
+    queueAdd(Q, nodes[min]);
 
+}
+
+void findAllNeighbors(int n,int nz,int *rows,int *cols,node *nodes,int *total_elements,int **neighbors){
+
+    // Find all the neighbors in advance 
+    int *counter = (int *)calloc(n,sizeof(int));
+    neighbors[0] = (int *)malloc((*total_elements)*sizeof(int));
+    for(int i=1;i<n;i++){
+        neighbors[i] = neighbors[i-1] + nodes[i-1].degree;
+    }
+    for(int i=0;i<nz;i++){
+        if(rows[i]!=cols[i]){
+            // Because we only have the lower part of the matrix whenever we add a neighbor we add its symmetric too
+            neighbors[rows[i]][counter[rows[i]]++] = cols[i];
+            neighbors[cols[i]][counter[cols[i]]++] = rows[i];
+        }
+    }
+    free(counter);
 }
 
 void findNeighbors(int nz,int numberOfnode,int *rows,int *cols,node *nodes,queue *Q,queue *temp_neighbors,int **neighbors){
@@ -90,6 +106,7 @@ void Cuthill_Mckee_cilk(int n,int nz,int *rows,int *cols,permutation *R){
     *minNode = 0;
     int *total_elements = (int *)malloc(sizeof(int));
     *total_elements = 0;
+    int **neighbors =(int **)malloc(n*sizeof(int *));
 
     // Queue where the nodes wait to be added in the permutation
     queue *Q = queueInit(n);
@@ -103,26 +120,11 @@ void Cuthill_Mckee_cilk(int n,int nz,int *rows,int *cols,permutation *R){
     // Calcutation of all the degrees
     degreeCalculation(nz,nodes,rows,cols,total_elements);
 
-    // Find all the neighbors in advance 
-    int *counter = (int *)calloc(n,sizeof(int));
-    int **neighbors =(int **)malloc(n*sizeof(int *));
-    neighbors[0] = (int *)malloc((*total_elements)*sizeof(int));
-    for(int i=1;i<n;i++){
-        neighbors[i] = neighbors[i-1] + nodes[i-1].degree;
-    }
-    for(int i=0;i<nz;i++){
-        if(rows[i]!=cols[i]){
-            // Because we only have the lower part of the matrix whenever we add a neighbor we add its symmetric too
-            neighbors[rows[i]][counter[rows[i]]++] = cols[i];
-            neighbors[cols[i]][counter[cols[i]]++] = rows[i];
-        }
-    }
-    
+    // Find all the neighbors in advance
+    findAllNeighbors(n,nz,rows,cols,nodes,total_elements,neighbors);
     
     // Find the node with the minimum degree and its neighbors 
-    minimumNode(n,minNode,nodes,R);
-    findNeighbors(nz,*minNode,rows,cols,nodes,Q,temp_neighbors,neighbors);
-    nodes_added++;
+    minimumNode(n,minNode,nodes,Q);
 
     // While the Q is not empty 
     while(!Q->empty){
@@ -136,10 +138,8 @@ void Cuthill_Mckee_cilk(int n,int nz,int *rows,int *cols,permutation *R){
         
         // Find the neighbors of the extracted node and add them in increasing order of degree in the Q
         findNeighbors(nz,extracted_node.num,rows,cols,nodes,Q,temp_neighbors,neighbors);
-        while(Q->empty == 1 && nodes_added != n){
-            minimumNode(n,minNode,nodes,R);
-            nodes_added++;
-            findNeighbors(nz,*minNode,rows,cols,nodes,Q,temp_neighbors,neighbors);
+        if(Q->empty == 1 && nodes_added != n){
+            minimumNode(n,minNode,nodes,Q);
         }
     }
     // Deallocate the space used and no longer needed 
@@ -147,7 +147,6 @@ void Cuthill_Mckee_cilk(int n,int nz,int *rows,int *cols,permutation *R){
     queueDelete(temp_neighbors);
     nodeDelete(nodes);
     free(minNode);
-    free(counter);
     free(neighbors[0]);
     free(neighbors);
     free(total_elements);
@@ -169,6 +168,7 @@ void R_Cuthill_Mckee_cilk(int n,int nz,int *rows,int *cols,permutation *R){
     
     int temp;
     // Apply the swap
+    // #pragma simd
     cilk_for(int i=0; i<new_n; i++){
         temp = R->perm[n-i-1];
         R->perm[n-i-1] = R->perm[i];

@@ -53,6 +53,25 @@ void minimumNode(int n,int *minNode,node *nodes,queue *Q){
 
 }
 
+void findAllNeighbors(int n,int nz,int *rows,int *cols,node *nodes,int *total_elements,int **neighbors){
+
+    // Find all the neighbors in advance 
+    int *counter = (int *)calloc(n,sizeof(int));
+    //neighbors =(int **)malloc(n*sizeof(int *));
+    neighbors[0] = (int *)malloc((*total_elements)*sizeof(int));
+    for(int i=1;i<n;i++){
+        neighbors[i] = neighbors[i-1] + nodes[i-1].degree;
+    }
+    for(int i=0;i<nz;i++){
+        if(rows[i]!=cols[i]){
+            // Because we only have the lower part of the matrix whenever we add a neighbor we add its symmetric too
+            neighbors[rows[i]][counter[rows[i]]++] = cols[i];
+            neighbors[cols[i]][counter[cols[i]]++] = rows[i];
+        }
+    }
+    free(counter);
+}
+
 void findNeighbors(int nz,int numberOfnode,int *rows,int *cols,node *nodes,queue *Q,queue *temp_neighbors,int **neighbors){
 
     // Counter that holds how many neighbors are found 
@@ -88,6 +107,7 @@ void Cuthill_Mckee(int n,int nz,int *rows,int *cols,permutation *R){
     *minNode = 0;
     int *total_elements = (int *)malloc(sizeof(int));
     *total_elements = 0;
+    int **neighbors =(int **)malloc(n*sizeof(int *));
 
     // Queue where the nodes wait to be added in the permutation
     queue *Q = queueInit(n);
@@ -101,26 +121,12 @@ void Cuthill_Mckee(int n,int nz,int *rows,int *cols,permutation *R){
     // Calcutation of all the degrees
     degreeCalculation(nz,nodes,rows,cols,total_elements);
 
-    // Find all the neighbors in advance 
-    int *counter = (int *)calloc(n,sizeof(int));
-    int **neighbors =(int **)malloc(n*sizeof(int *));
-    neighbors[0] = (int *)malloc((*total_elements)*sizeof(int));
-    for(int i=1;i<n;i++){
-        neighbors[i] = neighbors[i-1] + nodes[i-1].degree;
-    }
-    for(int i=0;i<nz;i++){
-        if(rows[i]!=cols[i]){
-            // Because we only have the lower part of the matrix whenever we add a neighbor we add its symmetric too
-            neighbors[rows[i]][counter[rows[i]]++] = cols[i];
-            neighbors[cols[i]][counter[cols[i]]++] = rows[i];
-        }
-    }
-    
+    // Find all the neighbors in advance
+    findAllNeighbors(n,nz,rows,cols,nodes,total_elements,neighbors);
     
     // Find the node with the minimum degree and its neighbors 
     minimumNode(n,minNode,nodes,Q);
-    // findNeighbors(nz,*minNode,rows,cols,nodes,Q,temp_neighbors,neighbors);
-    // nodes_added++;
+
     // While the Q is not empty 
     while(!Q->empty){
         // Extract the first node in the Q
@@ -142,7 +148,6 @@ void Cuthill_Mckee(int n,int nz,int *rows,int *cols,permutation *R){
     queueDelete(temp_neighbors);
     nodeDelete(nodes);
     free(minNode);
-    free(counter);
     free(neighbors[0]);
     free(neighbors);
     free(total_elements);
