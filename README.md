@@ -1,2 +1,5 @@
 # Reverse-Cuthill-Mckee
-Reverse-Cuthill-Mckee parallel implementation in C
+
+
+Parallel implementation of the Reverse Cuthill Mckee algorithm for sparse matrix reordering 
+

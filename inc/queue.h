@@ -16,6 +16,7 @@
  *	Revised	: Doinakis Michalis
  *      e-mail: doinakis@ece.auth.gr
  */
+
 #ifndef QUEUE_H
 #define QUEUE_H
 
@@ -27,6 +28,8 @@
   degree: The degree of the node 
   inside_perm: Variable that shows if the node is added in the permutation
   inside_q: Variable that shows if the node is added in the queue
+  neighbors: The neighbors of the corresponding node 
+  index: Helps fill the neighbors array
   
 */
 typedef struct{
@@ -35,6 +38,8 @@ typedef struct{
     int degree;
     bool inside_perm;
     bool inside_q;
+    int *neighbors;
+    int index;
 
 }node;
 
@@ -95,6 +100,6 @@ node *nodeInit(int n);
   nodeDelete: Deallocates the space allocated for the nodes 
     node: The node array to be deallocated
 */
-void nodeDelete(node *node);
+void nodeDelete(node *node, int n);
 
 #endif

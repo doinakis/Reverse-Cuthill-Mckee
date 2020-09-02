@@ -50,20 +50,21 @@ void permutationDelete(permutation *R);
 /*
     degreeCalculation: Calculates the degree of each node
         n: Number of nodes
-        degrees: Array with the degrees 
+        nz: Number of non zero elements 
+        nodes: Array with all the nodes
         rows,cols: Adjacency matrices rows[i] is adjacent to cols[i]
         total_elements: The sum the neighbors of all the elements in the graph
 */
-void degreeCalculation(int n, node *nodes,int *rows,int *cols,int *total_elements);
+void degreeCalculation(int n,int nz,node *nodes,int *rows,int *cols);
 
 /*
     minimumNode: Calculates the node with the minimum degree
         n: Number of nodes
         minNode: The node with the minimum degree
-        degrees: Array with the degrees
-        R: Struct with the permutation order
+        nodes: Array with all the nodes
+        Q: Queue containing the nodes to be added in the permutation
 */
-void minimumNode(int n, int *minNode,node *nodes,queue *Q);
+void minimumNode(int n,int *minNode,node *nodes,queue *Q);
 
 /*
     findAllNeighbors: Finds the neighbors of all the nodes in the graph
@@ -71,11 +72,9 @@ void minimumNode(int n, int *minNode,node *nodes,queue *Q);
         nz: Number non zero elements in the graph
         rows,cols: Adjacency matrices rows[i] is adjacent to cols[i]
         nodes: Array with all the nodes
-        total_elements: The sum the neighbors of all the elements in the graph
-        neighbors: 2d array holding the neighbors of all the elements
 */
 
-void findAllNeighbors(int n,int nz,int *rows,int *cols,node *nodes,int *total_elements,int **neighbors);
+void findAllNeighbors(int n,int nz,int *rows,int *cols,node *nodes);
 
 /*
     findNeighbors: Finds the neighbors of the corresponding node
@@ -84,10 +83,9 @@ void findAllNeighbors(int n,int nz,int *rows,int *cols,node *nodes,int *total_el
         rows,cols: Adjacency matrices rows[i] is adjacent to cols[i]
         nodes: Array with all the nodes 
         Q: Queue containing the nodes to be added in the permutation
-        temp_neighbors: Queue with the neighbors of the corresponding node 
-        neighbors: 2d array holding the neighbors of all the elements  
+        temp_neighbors: Queue with the neighbors of the corresponding node  
 */
-void findNeighbors(int nz,int numberOfnode,int *rows,int *cols,node *nodes,queue *Q,queue *temp_neighbors,int **neighbors);
+void findNeighbors(int nz,int numberOfnode,int *rows,int *cols,node *nodes,queue *Q,queue *temp_neighbors);
 
 /*
     Cuthill_Mckee: Cuthill-McKee serial implementation

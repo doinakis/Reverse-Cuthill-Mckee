@@ -24,7 +24,8 @@ int main(){
     // Note that the val variable is not use in this implementation but it could be used to calculate the weighted degree
     double *val;
     permutation *R = (permutation *)malloc(sizeof(permutation));
-    
+    if(R == NULL)
+        printf("Couldn't allocate memory for the permutation.File: main_cilk Function: main");
 
     if((f = fopen("./example_matrices/helm2d03.mtx", "r")) == NULL){
         printf("Could not open file. Check the file name and try again.");
@@ -40,11 +41,17 @@ int main(){
         
 
 
-    // Memory allocations 
+       // Memory allocations 
 
     rows = (int *)malloc(nz*sizeof(int));
+    if(rows == NULL)
+        printf("Couldn't allocate memory for rows matrix.File: main_cilk Function: main");
     cols = (int *)malloc(nz*sizeof(int));
+    if(cols == NULL)
+        printf("Couldn't allocate memory for cols matrix.File: main_cilk Function: main");
     val = (double *)malloc(nz*sizeof(double));
+    if(val == NULL)
+        printf("Couldn't allocate memory for rows matrix.File: main_cilk Function: main");
 
     // Initialize a permutaion 
     permutationInit(R,N);

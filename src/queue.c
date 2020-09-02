@@ -24,8 +24,12 @@ queue *queueInit(int n)
   queue *q;
 
   q = (queue *)malloc(sizeof (queue));
+  if(q == NULL)
+    printf("Couldn't allocate memory for q .File: queue.c Function: queueInit");
   q->buf = (node*)malloc(n*sizeof(node));
-  if (q == NULL) return (NULL);
+  if(q->buf == NULL)
+    printf("Couldn't allocate memory for q->buf .File: queue.c Function: queueInit");
+
   q->empty = 1;
   q->full = 0;
   q->head = 0;
@@ -92,20 +96,28 @@ void queueDel(queue *q, node *out){
 node *nodeInit(int n){
 
   node *nodes = (node *)malloc(n*sizeof(node));
+  if(nodes == NULL)
+    printf("Unable to allocate nodes.(Function nodeInit queue.c file");
+
   for(int i=0;i<n;i++){
 
     nodes[i].num = i;
     nodes[i].degree = 0;
     nodes[i].inside_perm = false;
     nodes[i].inside_q = false;
+    nodes[i].neighbors = NULL;
+    nodes[i].index = 0;
 
   }
 
   return nodes;
 }
 
-void nodeDelete(node *node){
+void nodeDelete(node *node,int n){
 
+  for(int i=0; i<n; i++){
+    free(node[i].neighbors);
+  }
   free(node);
 
 }
