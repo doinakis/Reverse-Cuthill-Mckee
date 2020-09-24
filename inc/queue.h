@@ -49,7 +49,6 @@ typedef struct{
   head,tail: Head and Tail for the circular queue 
   full,empty: Varibles to check the state of the queue (full or emtpy)
   buf_size: the size of the buffer 
-  
 */
 typedef struct {
   node *buf;
@@ -57,7 +56,7 @@ typedef struct {
   int full, empty;
   int buf_size;
 
-} queue;
+}queue;
 
 /*
   queueInit: Initializes an empty queue

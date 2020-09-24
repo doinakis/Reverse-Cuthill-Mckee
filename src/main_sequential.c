@@ -16,19 +16,19 @@ struct timeval startwtime,endwtime;
 double p_time;
 
 int main(){
-
     int ret_code;
     FILE *f;
     int M, N, nz;   
     int *rows, *cols;
+    
     // Note that the val variable is not use in this implementation but it could be used to calculate the weighted degree
     double *val;
-    permutation *R = (permutation *)malloc(sizeof(permutation));
+    permutation *R = (permutation *)malloc(5*sizeof(permutation));
     if(R == NULL)
         printf("Couldn't allocate memory for the permutation.File: main_cilk Function: main");
 
-    if((f = fopen("./example_matrices/helm2d03.mtx", "r")) == NULL){
-        printf("Could not open file. Check the file name and try again.");
+    if((f = fopen("./example_matrices/paper/inline_1.mtx", "r")) == NULL){
+        printf("Could not open file. Check thee file name and try again.");
         exit(1);
     }
       
@@ -41,7 +41,7 @@ int main(){
         
 
 
-       // Memory allocations 
+    // Memory allocations 
 
     rows = (int *)malloc(nz*sizeof(int));
     if(rows == NULL)
@@ -53,8 +53,11 @@ int main(){
     if(val == NULL)
         printf("Couldn't allocate memory for rows matrix.File: main_cilk Function: main");
 
-    // Initialize a permutaion 
-    permutationInit(R,N);
+    // Initialize a permutation 
+    for(int i=0;i<5;i++){
+        permutationInit(&R[i],N);
+    }
+    
 
     /* NOTE: when reading in doubles, ANSI C requires the use of the "l"  */
     /*   specifier as in "%lg", "%lf", "%le", otherwise errors will occur */
@@ -69,17 +72,14 @@ int main(){
 
     if (f != stdin) fclose(f);
 
-    gettimeofday(&startwtime,NULL);
-    R_Cuthill_Mckee(N,nz,rows,cols,R);
-    gettimeofday(&endwtime,NULL);
-    p_time = (double)((endwtime.tv_usec-startwtime.tv_usec)/1.0e6+endwtime.tv_sec-startwtime.tv_sec);
-
-    for (int i=0; i<10; i++){
-        fprintf(stdout, "%d ",R->perm[i]);
-
+    for(int i=0;i<5;i++){
+        gettimeofday(&startwtime,NULL);
+        R_Cuthill_Mckee(N,nz,rows,cols,&R[i]);
+        gettimeofday(&endwtime,NULL);
+        p_time += (double)((endwtime.tv_usec-startwtime.tv_usec)/1.0e6+endwtime.tv_sec-startwtime.tv_sec);
     }
+    p_time = p_time*1/5;
     printf("Time %f\n",p_time);    
-	
     // Deallocating the space that was malloced
     permutationDelete(R);
     free(rows);

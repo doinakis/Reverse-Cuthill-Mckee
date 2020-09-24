@@ -4,6 +4,7 @@
  *Author: Doinakis Michail
  *e-mail: doinakis@ece.auth.gr
  */
+
 #ifndef GLOBALDEFINES_H
 #define GLOBALDEFINES_H
 

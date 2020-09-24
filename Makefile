@@ -6,16 +6,16 @@
 # make        # compile all binary
 # make clean  # remove ALL binaries and objects
 
-all:	main_sequential  main_cilk mv.o
+all:	main_sequential  main_cilk  mv.o
 
 main_cilk:	main_cilk.o	rcm_cilk.o	queue.o mmio.o
-			gcc-7	-Wall	-O3	-fcilkplus	-fopenmp	-lcilkrts	rcm_cilk.o	queue.o	main_cilk.o	mmio.o	-o	main_cilk 
+			gcc-7	-Wall	-O3	-fcilkplus	-lcilkrts	rcm_cilk.o	queue.o	main_cilk.o	mmio.o	-o	main_cilk 
 			
 main_cilk.o:	./src/main_cilk.c
-			gcc-7	-Wall	-O3	-fcilkplus	-fopenmp	-lcilkrts	-c	./src/main_cilk.c 
+			gcc-7	-Wall	-O3	-fcilkplus	-lcilkrts	-c	./src/main_cilk.c 
 
 rcm_cilk.o:	./src/rcm_cilk.c
-			gcc-7	-Wall	-O3	-fcilkplus	-fopenmp	-lcilkrts	-c	./src/rcm_cilk.c 
+			gcc-7	-Wall	-O3	-fcilkplus	-lcilkrts	-c	./src/rcm_cilk.c 
 
 main_sequential:	main_sequential.o	rcm.o	queue.o	mmio.o
 			gcc-7	-Wall	-O3	rcm.o	queue.o	main_sequential.o	mmio.o	-o	main_sequential  
@@ -36,4 +36,4 @@ mv.o:
 	mv	*.o	./lib
 	
 clean:
-		$(RM)	./lib/*.o main_sequential main_cilk *.csv *.txt *.data  *.out *.o
+		$(RM)	./lib/*.o main_sequential main_cilk main_openmp *.csv  *.data  *.out *.o

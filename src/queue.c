@@ -63,7 +63,6 @@ void queueDelete(queue *q){
 }
 
 
-
 //changed the in variable to be type node
 void queueAdd(queue *q, node in){
 
@@ -78,7 +77,7 @@ void queueAdd(queue *q, node in){
   return;
 }
 
-//changed the out variable to be type node
+// Changed the out variable to be type node
 void queueDel(queue *q, node *out){
   
   *out = q->buf[q->head];
