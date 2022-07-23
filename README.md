@@ -1,5 +1,5 @@
 # Reverse-Cuthill-Mckee
-
+## Project as part of Aristotle University of Thessaloniki assignment.
 
 An attempt to parallelize the Reverse Cuthill Mckee algorithm for sparse matrix reordering 
 
